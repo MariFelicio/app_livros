@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput, Button, ActivityIndicator, Text } from 'react-native';
+import {View, TextInput, Button, ActivityIndicator, Text, Alert } from 'react-native';
 import FormRow from '../components/FormRow';
 import firebase from '@firebase/app';
 import '@firebase/auth';
@@ -27,10 +27,10 @@ export default class LoginPage extends React.Component {
       measurementId: "G-WGRD555CMR"
     };
     // Initialize Firebase
-    //firebase.initializeApp(firebaseConfig);   
-    if (firebase.apps.length === 0) {
-      firebase.initializeApp({ /* suas configurações aqui */ });
-    }
+    firebase.initializeApp(firebaseConfig);   
+   // if (firebase.apps.length === 0) {
+   //   firebase.initializeApp({ firebaseConfig });
+   // }
   }
   onChangeHandler(field, value){
     this.setState({
@@ -38,9 +38,38 @@ export default class LoginPage extends React.Component {
     });
   }
   tryLogin(){
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, message: ''});
     const {mail, password} = this.state;
-    firebase.auth().signInWithEmailAndPassword(mail, password).catch(error => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(mail, password)
+      .then(user => {
+        this.setState({message: 'Sucesso'});
+      })
+      .catch(error => {
+        if(error.code === 'auth/user-not-found'){
+          Alert.alert('Usuário não encontrado',
+                      'Deseja criar um cadastro com as informações inseridas?',
+                      [{
+                        text: 'Não ',
+                        onPress: () => {}
+                      }, {
+                        text: 'Sim',
+                        onPress: () => {
+                          firebase
+                            .auth()
+                            .createUserWithEmailAndPassword(mail, password)
+                            .then(user => {
+                              this.setState({message: 'Sucesso'});
+                            })
+                            .catch(error => {
+                              this.setState({message: error.message})  
+                              })
+                        }
+                      }],
+                      {cancelable: false}
+          )
+        }
       this.setState({message: error.message})  
       })
       .then(() => this.setState({isLoading: false}));
