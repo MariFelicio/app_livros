@@ -1,21 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+//import { createAppContainer, createStackNavigator } from 'react-navigation';
+
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import LoginScreen from './src/pages/LoginScreen';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ title: "Livros",
+        headerTintColor: 'white',
+        headerStyle: {
+            backgroundColor: '#6ca2f7',
+            borderBottomWidth: 1,
+            borderBottomColor: '#C5C5C5',
+        },
+        headerTitleStyle: {
+            color: 'white',
+            fontSize: 30,
+        } }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  ); 
+  }
