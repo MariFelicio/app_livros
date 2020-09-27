@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TextInput, Button, ActivityIndicator } from 'react-native';
+import {View, TextInput, Button, ActivityIndicator, Text } from 'react-native';
 import FormRow from '../components/FormRow';
 import firebase from '@firebase/app';
 import '@firebase/auth';
@@ -12,6 +12,7 @@ export default class LoginPage extends React.Component {
       mail: '',
       password: '',
       isLoading: false,
+      message: ''
     }
   }
   componentDidMount(){
@@ -38,11 +39,21 @@ export default class LoginPage extends React.Component {
   }
   tryLogin(){
     this.setState({isLoading: true});
-    const {mail, password} = this.state
-    firebase.auth().signInWithEmailAndPassword(mail, password).catch((error) => {
-        console.log('Usuário não encontrado', error);
+    const {mail, password} = this.state;
+    firebase.auth().signInWithEmailAndPassword(mail, password).catch(error => {
+      this.setState({message: error.message})  
       })
-      .then(() => this.setState({isLoading: false}))
+      .then(() => this.setState({isLoading: false}));
+  }
+  renderMessage(){
+    const {message} = this.state;
+    if(!message)
+      return null;
+    return(
+      <View>  
+        <Text>{message}</Text>
+      </View>
+    );
   }
   renderButton(){
     if(this.state.isLoading)
@@ -72,6 +83,7 @@ export default class LoginPage extends React.Component {
           />
         </FormRow>
         {this.renderButton() }          
+        {this.renderMessage() }
       </View>
     )
   }
