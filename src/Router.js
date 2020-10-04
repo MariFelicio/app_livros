@@ -25,7 +25,7 @@ export default function App() {
             color: 'white',
             fontSize: 30,
         } }}
-      screenOptions={{ title: "Main",
+      screenOptions={{ title: "Livros",
        
         }}
         >          
