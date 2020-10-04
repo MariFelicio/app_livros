@@ -3,9 +3,12 @@ import {View, TextInput, Button, ActivityIndicator, Text, Alert } from 'react-na
 import FormRow from '../components/FormRow';
 import firebase from '@firebase/app';
 import '@firebase/auth';
+import {connect} from 'react-redux';
+import {tryLogin} from '../actions'; 
+import { StackActions } from '@react-navigation/native';
 
 
-export default class LoginPage extends React.Component {
+class LoginPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -39,41 +42,39 @@ export default class LoginPage extends React.Component {
   }
   tryLogin(){
     this.setState({isLoading: true, message: ''});
-    const {mail, password} = this.state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(mail, password)
-      .then(user => {
-        this.setState({message: 'Sucesso'});
+    const {mail: email, password} = this.state;
+    this.props.tryLogin({email, password})
+        .then(user => {
+          if (user) 
+        return this.props.navigation.dispatch(
+            StackActions.replace('Main', {
+              user: 'user',})
+          );
+          //  return this.props.navigation.replace('Main');
+          
+          this.setState({
+            isLoading: false,
+            message: ''
+        });
       })
-      .catch(error => {
-        if(error.code === 'auth/user-not-found'){
-          Alert.alert('Usuário não encontrado',
-                      'Deseja criar um cadastro com as informações inseridas?',
-                      [{
-                        text: 'Não ',
-                        onPress: () => {}
-                      }, {
-                        text: 'Sim',
-                        onPress: () => {
-                          firebase
-                            .auth()
-                            .createUserWithEmailAndPassword(mail, password)
-                            .then(user => {
-                              this.setState({message: 'Sucesso'});
-                            })
-                            .catch(error => {
-                              this.setState({message: error.message})  
-                              })
-                        }
-                      }],
-                      {cancelable: false}
-          )
-        }
-      this.setState({message: error.message})  
-      })
-      .then(() => this.setState({isLoading: false}));
+        .catch(error => {
+          this.setState({
+            isLoading: false, 
+            message: this.getMessageByErrorCode(error.code)
+          });
+        });
   }
+  getMessageByErrorCode(errorCode) {
+		switch (errorCode) {
+			case 'auth/wrong-password':
+				return 'Senha incorreta';
+			case 'auth/user-not-found':
+				return 'Usuário não encontrado';
+			default:
+				return 'Erro desconhecido';
+		}
+  }
+  
   renderMessage(){
     const {message} = this.state;
     if(!message)
@@ -117,3 +118,4 @@ export default class LoginPage extends React.Component {
     )
   }
 }
+export default connect(null, {tryLogin})(LoginPage)
