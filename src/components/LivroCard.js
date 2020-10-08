@@ -1,27 +1,37 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react-native';
 
-const LivroCard = ({ livro }) => (
-  <View style = {styles.container}>
+
+
+const LivroCard = ({ livro, onNavigate }) => {
+  return (
+
+    <TouchableOpacity
+      onPress={onNavigate}
+      //onPress={() => navigation.navigate('LivroDetailPages')}
+      style={styles.container}>
       <View style={styles.card}>
         <Image
           source={{
             uri: livro.img
           }}
           aspectRatio={1}
-          resizeMode="cover"
-          />
-          <View style={styles.cardTitleWrapper}>
-            <Text style={styles.cardTitle}>{livro.title}</Text>
-          </View>
+          resizeMode="cover" />
+        <View style={styles.cardTitleWrapper}>
+          <Text style={styles.cardTitle}>{livro.title}</Text>
+        </View>
       </View>
-  </View>
-);
+    </TouchableOpacity>
+
+  );
+};
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    //flex: 0.5,
+    width: '50%',
     padding: 10,
-    height: Dimensions.get('window').width / 2
+    height: Dimensions.get('window').width / 2,
+    //borderWidth: 1,
   },
   card:{
     flex: 1,
