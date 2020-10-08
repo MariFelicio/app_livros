@@ -1,12 +1,15 @@
 import React from 'react';
 import {ScrollView, Text, StyleSheet, Image} from 'react-native';
+//import { connect } from 'react-redux';
 import Line from '../components/Line';
 import LongText from '../components/LongText';
 
 
 class LivroDetailPage  extends React.Component {
     render() {
-      const { livro } = this.props.navigation.state.params;
+      const { navigation } = this.props;
+		  const { livro } = navigation.state.params;
+      //const { livro } = this.props.navigation.state.params;
       //const { livro } = navigation.state.params;
         return(
         <ScrollView>
