@@ -13,7 +13,12 @@ import {StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
 import FormRow from '../components/FormRow';
-import {setField, saveLivro} from '../actions';
+import {
+  setField, 
+  saveLivro, 
+  setWholeLivro, 
+  resetForm
+} from '../actions';
 
 class LivroFormPage extends React.Component {
   constructor(props){
@@ -21,6 +26,14 @@ class LivroFormPage extends React.Component {
     this.state = {
       isLoading: false,
     }
+  }
+  componentDidMount() {
+    const { route, setWholeLivro, resetForm } = this.props;
+    const { params } = route;
+    if (params && params.livroToEdit) {
+      return setWholeLivro(params.livroToEdit)
+    } return resetForm();
+    
   }
   render (){
     const {
@@ -135,6 +148,8 @@ function mapStateToProps(state){
 }
 const matpDispatchToProps = {
   setField,
-  saveLivro
+  saveLivro,
+  setWholeLivro,
+  resetForm
 }
 export default connect(mapStateToProps, matpDispatchToProps) (LivroFormPage);

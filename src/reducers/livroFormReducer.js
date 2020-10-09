@@ -1,4 +1,9 @@
-import { SET_FIELD, LIVRO_SAVED_SUCCESS} from '../actions';
+import {
+  SET_FIELD, 
+  LIVRO_SAVED_SUCCESS,
+  SET_WHOLE_LIVRO,
+  RESET_FORM,
+} from '../actions';
 
 const INITIAL_STATE = {
   id: null,
@@ -15,6 +20,9 @@ export default function(state = INITIAL_STATE, action){
       const newState = {...state}
       newState[action.field] = action.value;
       return newState;   
+    case SET_WHOLE_LIVRO:
+      return action.livro;
+    case RESET_FORM: 
     case LIVRO_SAVED_SUCCESS :
       return INITIAL_STATE;
     default:

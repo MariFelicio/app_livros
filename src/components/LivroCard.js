@@ -3,11 +3,10 @@ import {View, Text, StyleSheet, Dimensions, Image, TouchableOpacity} from 'react
 
 
 
-const LivroCard = ({ livro, onNavigate }) => {
+const LivroCard = ({ livro, onPress }) => {
   return (
-
     <TouchableOpacity
-      onPress={onNavigate}
+      onPress={onPress}
       //onPress={() => navigation.navigate('LivroDetailPages')}
       style={styles.container}>
       <View style={styles.card}>

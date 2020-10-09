@@ -4,6 +4,7 @@ import LivroCard from '../components/LivroCard';
 import AddLivroCard from '../components/AddLivroCard';
 import { connect } from 'react-redux';
 import { watchLivros } from '../actions';
+import {} from '@react-navigation/native'
 
 class LivrosPage extends React.Component {
   componentDidMount(){
@@ -21,10 +22,10 @@ class LivrosPage extends React.Component {
                 onPress={() => navigation.navigate('LivroForm')} />
               : <LivroCard 
                   livro={item}
-                  //onNavigate={livro => props.navigation.dispatch(
-                  // StackActions.replace('LivroDetail', {livro})
-                // )}
-                  onNavigate={()=> navigation.navigate('LivroDetail', { livro: item })}
+                // onPress={() => navigation.dispatch(
+                   // 'LivroDetail', {livro: item })
+              // }
+                onPress={()=> navigation.navigate('LivroDetail', { livro: item })}
                 />
               )}
           
