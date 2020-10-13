@@ -1,5 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList } from 'react-native';
+import {StyleSheet, 
+        View, 
+        FlatList,
+        ActivityIndicator,
+} from 'react-native';
 import LivroCard from '../components/LivroCard';
 import AddLivroCard from '../components/AddLivroCard';
 import { connect } from 'react-redux';
@@ -11,7 +15,10 @@ class LivrosPage extends React.Component {
     this.props.watchLivros();
   }
   render() {
-    const { livros, navigation } = this.props; 
+    const { livros, navigation } = this.props;
+    if ( livros === null) {{
+      return <ActivityIndicator/>;
+    }} 
     return (
         <View>
           <FlatList
@@ -51,6 +58,9 @@ const styles = StyleSheet.create({
 })
 const mapStateToProps = state => {  
   const { livros } = state;
+  if (livros === null) {
+    return { livros }
+  }
   const keys = Object.keys(livros);
   const livrosWithKeys = keys.map( id => {
       return { ...livros[id], id } 
